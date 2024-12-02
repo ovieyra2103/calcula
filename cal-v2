@@ -1,0 +1,308 @@
+   <div class="form-group">
+        <label for="eventType">Tipo de Evento:</label>
+        <select id="eventType">
+            <option value="">Selecciona un evento</option>
+            <option value="fiesta">🎉 Fiesta en Casa</option>
+            <option value="boda">💒 Boda</option>
+            <option value="quinceañera">👗 Quinceañera</option>
+            <option value="piñata">🪅 Fiesta Infantil/Piñata</option>
+            <option value="posada">🎄 Posada</option>
+            <option value="carne">🥩 Carne Asada</option>
+            <option value="bautizo">👶 Bautizo</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="guests">Número de Invitados:</label>
+        <input type="number" id="guests" min="1" placeholder="Ingresa el número de invitados">
+        <span class="input-icon">👥</span>
+    </div>
+
+    <div class="form-group">
+        <label for="duration">Duración del Evento (horas):</label>
+        <input type="number" id="duration" min="1" max="24" placeholder="Duración en horas">
+        <span class="input-icon">⏰</span>
+    </div>
+
+    <button onclick="calculateIce()">Calcular Hielo Necesario</button>
+
+    <div id="result"></div>
+</div>
+
+<script>
+    function calculateIce() {
+        const eventType = document.getElementById('eventType').value;
+        const guests = parseInt(document.getElementById('guests').value);
+        const duration = parseInt(document.getElementById('duration').value);
+
+        if (!eventType || !guests || !duration || guests < 1 || duration < 1 || duration > 24) {
+            alert('Por favor verifica todos los campos');
+            return;
+        }
+
+        const iceCalculations = {
+            'fiesta': { factor: 1, tip: 'Considera tener hieleras disponibles y distribuidas estratégicamente' },
+            'boda': { factor: 1.5, tip: 'Recomendamos distribuir el hielo entre la cocina y la zona de bebidas' },
+            'quinceañera': { factor: 1.2, tip: 'Ten en cuenta el hielo extra para las fotos con la champaña' },
+            'piñata': { factor: 0.5, tip: 'Ideal para refrescos y aguas frescas. Considera el clima del día.' },
+            'posada': { factor: 0.8, tip: 'Perfecto para ponche y bebidas calientes. Añade extra si habrá bebidas frías' },
+            'carne': { factor: 1.2, tip: 'Considera hielo extra para enfriar las bebidas rápidamente y mantener alimentos frescos' },
+            'bautizo': { factor: 0.7, tip: 'Ideal para una celebración durante el día. Ajusta según el clima' }
+        };
+
+        const calculation = iceCalculations[eventType];
+        const totalIce = Math.ceil((guests * calculation.factor * (duration/4)) / 5);
+        
+        const resultDiv = document.getElementById('result');
+        resultDiv.innerHTML = `
+            <h3>Recomendación de Hielo:</h3>
+            <p class="recommendation">
+                🧊 Necesitarás aproximadamente <strong>${totalIce} bolsas de hielo</strong> de 5kg
+            </p>
+            <p class="recommendation">
+                💡 Tip personalizado: ${calculation.tip}
+            </p>
+        `;
+        resultDiv.classList.remove('result-visible');
+        void resultDiv.offsetWidth; // Trigger reflow
+        resultDiv.classList.add('result-visible');
+    }
+</script>
+
+
+
+code
+html
+<div class="calculator">
+    <div class="form-group event-selector">
+        <label for="eventType">Tipo de Evento</label>
+        <div class="custom-select">
+            <select id="eventType" onchange="updateEventIcon()">
+                <option value="" disabled selected>Selecciona un evento</option>
+                <option value="fiesta" data-icon="🎉">Fiesta en Casa</option>
+                <option value="boda" data-icon="💒">Boda</option>
+                <option value="quinceañera" data-icon="👗">Quinceañera</option>
+                <option value="piñata" data-icon="🪅">Fiesta Infantil/Piñata</option>
+                <option value="posada" data-icon="🎄">Posada</option>
+                <option value="carne" data-icon="🥩">Carne Asada</option>
+                <option value="bautizo" data-icon="👶">Bautizo</option>
+            </select>
+            <div class="select-icon" id="eventIcon">📅</div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="guests">Número de Invitados</label>
+        <div class="input-container">
+            <input type="number" 
+                   id="guests" 
+                   min="1" 
+                   max="1000"
+                   placeholder="¿Cuántos invitados?"
+                   oninput="validateNumber(this, 1, 1000)">
+            <div class="input-controls">
+                <button class="counter-btn" onclick="adjustValue('guests', -1)">-</button>
+                <button class="counter-btn" onclick="adjustValue('guests', 1)">+</button>
+            </div>
+            <span class="input-icon">👥</span>
+        </div>
+        <div class="range-slider">
+            <input type="range" min="1" max="1000" value="50" id="guestsRange" oninput="syncInputs('guests')">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="duration">Duración del Evento</label>
+        <div class="input-container">
+            <input type="number" 
+                   id="duration" 
+                   min="1" 
+                   max="24" 
+                   placeholder="Horas de duración"
+                   oninput="validateNumber(this, 1, 24)">
+            <div class="input-controls">
+                <button class="counter-btn" onclick="adjustValue('duration', -1)">-</button>
+                <button class="counter-btn" onclick="adjustValue('duration', 1)">+</button>
+            </div>
+            <span class="input-icon">⏰</span>
+        </div>
+        <div class="range-slider">
+            <input type="range" min="1" max="24" value="4" id="durationRange" oninput="syncInputs('duration')">
+        </div>
+    </div>
+
+    <button class="calculate-btn" onclick="calculateIce()">
+        <span class="btn-icon">🧊</span>
+        <span class="btn-text">Calcular Hielo Necesario</span>
+    </button>
+
+    <div id="result" class="result-container"></div>
+</div>
+
+<style>
+.form-group {
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.custom-select {
+    position: relative;
+    width: 100%;
+}
+
+.custom-select select {
+    width: 100%;
+    padding: 12px 40px 12px 15px;
+    appearance: none;
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.select-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    font-size: 20px;
+}
+
+.input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-container input {
+    flex: 1;
+    padding: 12px 45px 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.input-controls {
+    position: absolute;
+    right: 40px;
+    display: flex;
+    gap: 5px;
+}
+
+.counter-btn {
+    width: 25px;
+    height: 25px;
+    border: none;
+    border-radius: 5px;
+    background: #f0f0f0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.counter-btn:hover {
+    background: #e0e0e0;
+}
+
+.range-slider {
+    margin-top: 10px;
+}
+
+.range-slider input {
+    width: 100%;
+    height: 5px;
+    border-radius: 5px;
+    background: #e0e0e0;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.range-slider input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #3498db;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.calculate-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.calculate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+}
+
+.btn-icon {
+    font-size: 20px;
+}
+
+.result-container {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    display: none;
+}
+</style>
+
+<script>
+function updateEventIcon() {
+    const select = document.getElementById('eventType');
+    const icon = document.getElementById('eventIcon');
+    const selectedOption = select.options[select.selectedIndex];
+    icon.textContent = selectedOption.dataset.icon || '📅';
+}
+
+function validateNumber(input, min, max) {
+    let value = parseInt(input.value);
+    if (value < min) input.value = min;
+    if (value > max) input.value = max;
+    document.getElementById(input.id + 'Range').value = input.value;
+}
+
+function adjustValue(inputId, change) {
+    const input = document.getElementById(inputId);
+    const min = parseInt(input.min);
+    const max = parseInt(input.max);
+    let newValue = parseInt(input.value || 0) + change;
+    newValue = Math.max(min, Math.min(max, newValue));
+    input.value = newValue;
+    document.getElementById(inputId + 'Range').value = newValue;
+}
+
+function syncInputs(inputId) {
+    const numberInput = document.getElementById(inputId);
+    const rangeInput = document.getElementById(inputId + 'Range');
+    numberInput.value = rangeInput.value;
+}
+
+function calculateIce() {
+    // Previous calculation logic remains the same
+    // Add animation and transition effects to result display
+    const resultDiv = document.getElementById('result');
+    resultDiv.style.display = 'block';
+    resultDiv.style.animation = 'slideIn 0.5s ease-out';
+}
+</script>
