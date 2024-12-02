@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Hielo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #83a4d4, #b6fbff);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .calculator {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 2em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #34495e;
+            font-weight: 500;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #2980b9;
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background: #f8f9fa;
+            display: none;
+        }
+
+        .result-visible {
+            display: block !important;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .ice-icon {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+
+        .recommendation {
+            color: #2c3e50;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <h1>🧊 Calculadora de Hielo</h1>
+        
+        <div class="form-group">
+            <label for="eventType">Tipo de Evento:</label>
+            <select id="eventType">
+                <option value="">Selecciona un evento</option>
+                <option value="fiesta">Fiesta en Casa</option>
+                <option value="boda">Boda</option>
+                <option value="quinceañera">Quinceañera</option>
+                <option value="piñata">Fiesta Infantil/Piñata</option>
+                <option value="posada">Posada</option>
+                <option value="carne">Carne Asada</option>
+                <option value="bautizo">Bautizo</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="guests">Número de Invitados:</label>
+            <input type="number" id="guests" min="1" placeholder="Ingresa el número de invitados">
+        </div>
+
+        <div class="form-group">
+            <label for="duration">Duración del Evento (horas):</label>
+            <input type="number" id="duration" min="1" max="24" placeholder="Duración en horas">
+        </div>
+
+        <button onclick="calculateIce()">Calcular</button>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function calculateIce() {
+            const eventType = document.getElementById('eventType').value;
+            const guests = parseInt(document.getElementById('guests').value);
+            const duration = parseInt(document.getElementById('duration').value);
+
+            if (!eventType || !guests || !duration) {
+                alert('Por favor completa todos los campos');
+                return;
+            }
+
+            let icePerPerson;
+            let extraInfo = '';
+
+            switch(eventType) {
+                case 'fiesta':
+                    icePerPerson = 1;
+                    extraInfo = 'Considera tener hieleras disponibles';
+                    break;
+                case 'boda':
+                    icePerPerson = 1.5;
+                    extraInfo = 'Recomendamos distribuir el hielo entre la cocina y la zona de bebidas';
+                    break;
+                case 'quinceañera':
+                    icePerPerson = 1.2;
+                    extraInfo = 'Ten en cuenta el hielo extra para las fotos con la champaña';
+                    break;
+                case 'piñata':
+                    icePerPerson = 0.5;
+                    extraInfo = 'Ideal para refrescos y aguas frescas';
+                    break;
+                case 'posada':
+                    icePerPerson = 0.8;
+                    extraInfo = 'Perfecto para ponche y bebidas calientes';
+                    break;
+                case 'carne':
+                    icePerPerson = 1.2;
+                    extraInfo = 'Considera hielo extra para enfriar las bebidas rápidamente';
+                    break;
+                case 'bautizo':
+                    icePerPerson = 0.7;
+                    extraInfo = 'Ideal para una celebración durante el día';
+                    break;
+            }
+
+            const totalIce = Math.ceil((guests * icePerPerson * (duration/4)) / 5);
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `
+                <h3>Recomendación:</h3>
+                <p class="recommendation">
+                    🧊 Necesitarás aproximadamente <strong>${totalIce} bolsas de hielo</strong> de 5kg
+                </p>
+                <p style="margin-top: 10px; color: #666;">
+                    💡 Tip: ${extraInfo}
+                </p>
+            `;
+            resultDiv.classList.add('result-visible');
+        }
+    </script>
+</body>
+</html>
