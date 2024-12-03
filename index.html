@@ -13,37 +13,12 @@
         }
 
         body {
+            background: linear-gradient(135deg, #83a4d4, #b6fbff);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            transition: background-color 0.5s, color 0.5s;
-        }
-
-        :root {
-            --bg-color: #ffffff;
-            --text-color: #2c3e50;
-            --button-bg: #3498db;
-            --button-hover: #2980b9;
-        }
-
-        /* Tema oscuro */
-        body.dark {
-            --bg-color: #121212;    
-            --text-color: #ffffff;
-            --button-bg: #444444;
-            --button-hover: #333333;
-        }
-
-        /* Tema colorido */
-        body.colorful {
-            --bg-color: #ffefd5;
-            --text-color: #6a5acd;
-            --button-bg: #ff69b4;
-            --button-hover: #ff1493;
         }
 
         .calculator {
@@ -56,6 +31,7 @@
         }
 
         h1 {
+            color: #2c3e50;
             text-align: center;
             margin-bottom: 25px;
             font-size: 2em;
@@ -68,6 +44,7 @@
         label {
             display: block;
             margin-bottom: 8px;
+            color: #34495e;
             font-weight: 500;
         }
 
@@ -82,27 +59,23 @@
 
         select:focus, input:focus {
             outline: none;
-            border-color: var(--button-bg);
+            border-color: #3498db;
         }
 
         button {
             width: 100%;
             padding: 12px;
-            background: var(--button-bg);
+            background: #3498db;
             color: white;
             border: none;
             border-radius: 8px;
             font-size: 16px;
             cursor: pointer;
-            transition: transform 0.2s, background 0.3s;
+            transition: background 0.3s;
         }
 
         button:hover {
-            background: var(--button-hover);
-        }
-
-        button:active {
-            transform: scale(0.95);
+            background: #2980b9;
         }
 
         #result {
@@ -111,15 +84,11 @@
             border-radius: 8px;
             background: #f8f9fa;
             display: none;
-            transition: transform 0.3s ease, opacity 0.3s ease;
-            transform: translateY(20px);
-            opacity: 0;
         }
 
         .result-visible {
             display: block !important;
-            transform: translateY(0);
-            opacity: 1;
+            animation: fadeIn 0.5s ease-in;
         }
 
         @keyframes fadeIn {
@@ -127,40 +96,23 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        #theme-selector {
-            text-align: center;
-            margin-bottom: 20px;
+        .ice-icon {
+            font-size: 24px;
+            margin-right: 10px;
         }
 
-        .theme-button {
-            background: none;
-            border: 2px solid transparent;
-            color: var(--text-color);
-            cursor: pointer;
-            font-size: 1rem;
-            margin: 0 5px;
-            padding: 10px 15px;
-            transition: all 0.3s ease;
+        .recommendation {
+            color: #2c3e50;
+            font-weight: 500;
+            margin-top: 10px;
         }
 
-        .theme-button:hover {
-            border-color: var(--button-bg);
-        }
-
-        .theme-button.active {
-            border-color: var(--button-bg);
-            font-weight: bold;
-        }
     </style>
 </head>
 <body>
-    <div id="theme-selector">
-        <button class="theme-button active" onclick="setTheme('light')">🌞 Claro</button>
-        <button class="theme-button" onclick="setTheme('dark')">🌙 Oscuro</button>
-        <button class="theme-button" onclick="setTheme('colorful')">🌈 Colorido</button>
-    </div>
     <div class="calculator">
-        <h1>🧊 Calculadora de Hielo</h1>        
+        <h1>🧊 Calculadora de Hielo</h1>
+        
         <div class="form-group">
             <label for="eventType">Tipo de Evento:</label>
             <select id="eventType">
@@ -204,30 +156,50 @@
             let icePerPerson;
             let extraInfo = '';
 
-            switch (eventType) {
-                case 'fiesta': icePerPerson = 1; extraInfo = 'Considera tener hieleras disponibles'; break;
-                case 'boda': icePerPerson = 1.5; extraInfo = 'Distribuye el hielo entre cocina y bebidas'; break;
-                case 'quinceañera': icePerPerson = 1.2; extraInfo = 'Hielo extra para fotos con champaña'; break;
-                case 'piñata': icePerPerson = 0.5; extraInfo = 'Ideal para refrescos y aguas frescas'; break;
-                case 'posada': icePerPerson = 0.8; extraInfo = 'Perfecto para ponche y bebidas calientes'; break;
-                case 'carne': icePerPerson = 1.2; extraInfo = 'Hielo extra para enfriar bebidas rápidamente'; break;
-                case 'bautizo': icePerPerson = 0.7; extraInfo = 'Ideal para celebraciones de día'; break;
+            switch(eventType) {
+                case 'fiesta':
+                    icePerPerson = 1;
+                    extraInfo = 'Considera tener hieleras disponibles';
+                    break;
+                case 'boda':
+                    icePerPerson = 1.5;
+                    extraInfo = 'Recomendamos distribuir el hielo entre la cocina y la zona de bebidas';
+                    break;
+                case 'quinceañera':
+                    icePerPerson = 1.2;
+                    extraInfo = 'Ten en cuenta el hielo extra para las fotos con la champaña';
+                    break;
+                case 'piñata':
+                    icePerPerson = 0.5;
+                    extraInfo = 'Ideal para refrescos y aguas frescas';
+                    break;
+                case 'posada':
+                    icePerPerson = 0.8;
+                    extraInfo = 'Perfecto para ponche y bebidas calientes';
+                    break;
+                case 'carne':
+                    icePerPerson = 1.2;
+                    extraInfo = 'Considera hielo extra para enfriar las bebidas rápidamente';
+                    break;
+                case 'bautizo':
+                    icePerPerson = 0.7;
+                    extraInfo = 'Ideal para una celebración durante el día';
+                    break;
             }
 
-            const totalIce = Math.ceil((guests * icePerPerson * (duration / 4)) / 5);
+            const totalIce = Math.ceil((guests * icePerPerson * (duration/4)) / 5);
+            
             const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = `
+            resultDiv.innerHTML = 
                 <h3>Recomendación:</h3>
-                <p>🧊 Necesitarás aproximadamente <strong>${totalIce} bolsas de hielo</strong> de 5kg.</p>
-                <p style="margin-top: 10px;">💡 Tip: ${extraInfo}</p>
-            `;
+                <p class="recommendation">
+                    🧊 Necesitarás aproximadamente <strong>${totalIce} bolsas de hielo</strong> de 5kg
+                </p>
+                <p style="margin-top: 10px; color: #666;">
+                    💡 Tip: ${extraInfo}
+                </p>
+            ;
             resultDiv.classList.add('result-visible');
-        }
-
-        function setTheme(theme) {
-            document.body.className = theme;
-            document.querySelectorAll('.theme-button').forEach(button => button.classList.remove('active'));
-            document.querySelector(`[onclick="setTheme('${theme}')"]`).classList.add('active');
         }
     </script>
 </body>
