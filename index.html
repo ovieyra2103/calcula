@@ -151,13 +151,52 @@
             font-weight: 500;
             margin-top: 10px;
         }
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #2c3e50;
+            --button-bg: #3498db;
+            --button-hover: #2980b9;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        
+        button {
+            background-color: var(--button-bg);
+        }
+        
+        button:hover {
+            background-color: var(--button-hover);
+        
+        }
 
+/* Tema oscuro */
+        body.dark {
+            --bg-color: #121212;    
+            --text-color: #ffffff;
+            --button-bg: #444444;
+            --button-hover: #333333;
+        }
+
+/* Tema colorido */
+        body.colorful {
+            --bg-color: #ffefd5;
+            --text-color: #6a5acd;
+            --button-bg: #ff69b4;
+            --button-hover: #ff1493;
+        }
     </style>
 </head>
 <body>
+    <div id="theme-selector" style="text-align: center; margin-bottom: 20px;">
+    <button onclick="setTheme('light')">🌞 Claro</button>
+    <button onclick="setTheme('dark')">🌙 Oscuro</button>
+    <button onclick="setTheme('colorful')">🌈 Colorido</button>
+    </div>
     <div class="calculator">
-        <h1>🧊 Calculadora de Hielo</h1>
-        
+        <h1>🧊 Calculadora de Hielo</h1>        
         <div class="form-group">
             <label for="eventType">Tipo de Evento:</label>
             <select id="eventType">
